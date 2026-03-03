@@ -1,6 +1,6 @@
 services:
   paybridge-gateway-svc:
-    image: krakend:latest 
+    image: krakend:2.13
     container_name: paybridge-gateway-svc
     ports:
       - "8000:8000"
