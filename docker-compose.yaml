@@ -1,14 +1,14 @@
 services:
   paybridge-gateway-svc:
     image: krakend:2.13
-    container_name: paybridge-gateway-svc
     ports:
       - "8000:8000"
     volumes:
-      - "${PWD}/krakend.json:/etc/krakend/krakend.json"
+      - ./krakend.json:/etc/krakend/krakend.json
     command: ["/usr/bin/krakend", "run", "-d", "-c", "/etc/krakend/krakend.json"]
     networks:
       - paybridge_network
+
   swagger-ui:
     image: swaggerapi/swagger-ui
     ports:
