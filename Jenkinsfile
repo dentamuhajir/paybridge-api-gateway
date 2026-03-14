@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
+        IMAGE_NAME = "dentamuhajir/paybridge-gateway-svc"
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+
     stages {
 
         stage('Checkout') {
@@ -9,34 +15,22 @@ pipeline {
             }
         }
 
-        stage('Deploy Gateway') {
+        stage('Build Image') {
             steps {
-                sh "docker network create paybridge_network || true"
-
-                sh "docker rm -f paybridge-gateway-svc || true"
-                sh "docker rm -f swagger-ui || true"
-
-                sh "docker compose down || true"
-                sh "docker compose pull"
-                sh "docker compose up -d"
+                sh """
+                    docker build \
+                        -t ${IMAGE_NAME}:${IMAGE_TAG} \
+                        -t ${IMAGE_NAME}:latest .
+                """
             }
         }
 
-        stage('Verification') {
+        stage('Push Image') {
             steps {
-                echo "======== Verifying Gateway ========"
-                sh "docker compose ps"
+                sh "echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_CREDENTIALS_USR} --password-stdin"
+                sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                sh "docker push ${IMAGE_NAME}:latest"
             }
-        }
-    }
-
-    post {
-        success {
-            echo "Gateway Deployment Successful!"
-        }
-        failure {
-            echo "Gateway Deployment Failed. Checking logs..."
-            sh "docker compose logs --tail=20"
         }
     }
 }
