@@ -73,8 +73,7 @@ pipeline {
                     
                     git add ${DEPLOYMENT_FILE}
                     
-                    # Commit with professional format
-                    git commit -m "ci(deploy): update paybridge-api-gateway to ${IMAGE_TAG} [build #${BUILD_NUMBER}] [skip ci]"
+                    git commit -m "ci(deploy): bump paybridge-api-gateway image to ${IMAGE_TAG} [build #${BUILD_NUMBER}] [skip ci]"
                     
                     git push origin \$CURRENT_BRANCH
                     echo "======== Manifest updated to ${IMAGE_TAG} and pushed! ========"
