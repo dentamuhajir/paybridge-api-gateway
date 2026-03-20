@@ -67,8 +67,7 @@ pipeline {
                     # Update image tag in the gateway deployment YAML
                     sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|g" ${DEPLOYMENT_FILE}
 
-                    # Configure Paybridge Bot (Linked to your Gravatar email)
-                    git config user.email "bot@paybridge.dev"
+                    git config user.email "11desember2013@gmail.com"
                     git config user.name "Paybridge Bot"
                     
                     git add ${DEPLOYMENT_FILE}
