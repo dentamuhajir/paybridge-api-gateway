@@ -1,0 +1,76 @@
+{
+  "version": 3,
+  "port": 8000,
+  "timeout": "10s",
+  "name": "Paybridge API Gateway",
+  "endpoints": [
+    {
+      "endpoint": "/api/v1/register",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/auth/register",
+          "method": "POST",
+          "host": ["http://paybridge-user-svc:8080"],
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/login",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/auth/login",
+          "method": "POST",
+          "host": ["http://paybridge-user-svc:8080"],
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/loan-applications/{id}/approve",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/loan-applications/{id}/approve",
+          "method": "POST",
+          "host": ["http://paybridge-loan-svc:8084"],
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/loan-applications",
+      "method": "POST",
+      "extra_config": {
+        "auth/validator": {
+          "alg": "HS256",
+          "secret": "a3f9c7e12b5d4f9083e2c1a7d9b8f6c4a1e0d3f2b4c59687e0b1c4d2f9a7b3c1",
+          "roles_key": "roles",
+          "roles": ["ROLE_USER"],
+          "propagate_claims": ["user_id", "roles"]
+        }
+      },
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/loan-applications",
+          "method": "POST",
+          "host": ["http://paybridge-loan-svc:8084"],
+          "encoding": "no-op"
+        }
+      ]
+    }
+  ],
+  "extra_config": {
+    "security/cors": {
+      "allow_origins": ["*"],
+      "allow_methods": ["GET", "POST", "PUT", "DELETE"],
+      "allow_headers": ["Origin", "Authorization", "Content-Type", "x-trace-id"]
+    }
+  }
+}

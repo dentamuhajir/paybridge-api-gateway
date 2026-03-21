@@ -1,11 +1,17 @@
 services:
   paybridge-gateway-svc:
     image: krakend:2.13
+    environment:
+      - USER_SERVICE_HOST=${USER_SERVICE_HOST}
+      - LOAN_SERVICE_HOST=${LOAN_SERVICE_HOST}
+      - JWT_SECRET=${JWT_SECRET}
+      - KRAKEND_TIMEOUT=${GATEWAY_TIMEOUT}
     ports:
       - "8000:8000"
     volumes:
-      - ./krakend.json:/etc/krakend/krakend.json
+      - ./krakend.dev.json:/etc/krakend/krakend.json
     command: ["/usr/bin/krakend", "run", "-d", "-c", "/etc/krakend/krakend.json"]
+    container_name: paybridge-gateway-api-dev
     networks:
       - paybridge_network
 
