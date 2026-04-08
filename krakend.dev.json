@@ -64,6 +64,31 @@
           "encoding": "no-op"
         }
       ]
+    },
+    {
+      "endpoint": "/v1/account/balance/{owner_id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/internal/account/{owner_id}/balance",
+          "method": "GET",
+          "host": ["http://paybridge-transaction-svc-dev:8082"],
+          "encoding": "no-op",
+          "extra_config": {
+            "backend/http": {
+              "return_error_details": "backend_alias"
+            },
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": ["request"],
+                "name": "Authorization",
+                "value": "Bearer c9d44f1802afef391a0c847fb3bf6967c77a9f0f0ac12c29dfe651eac9442c52"
+              }
+            }
+          }
+        }
+      ]
     }
   ],
   "extra_config": {
