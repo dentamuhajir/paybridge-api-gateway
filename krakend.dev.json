@@ -66,7 +66,7 @@
       ]
     },
     {
-      "endpoint": "/v1/account/balance/{owner_id}",
+      "endpoint": "/api/v1/account/balance/{owner_id}",
       "method": "GET",
       "output_encoding": "no-op",
       "backend": [
@@ -87,6 +87,19 @@
               }
             }
           }
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/loan-products",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/loan-products",
+          "method": "GET",
+          "host": ["paybridge-product-svc:8083"],
+          "encoding": "no-op"
         }
       ]
     }
